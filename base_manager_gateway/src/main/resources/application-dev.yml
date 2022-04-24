@@ -1,0 +1,44 @@
+server:
+  port: 9999
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://101.34.81.192:3306/base_manager?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowMultiQueries=true
+    username:
+    password:
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 101.34.81.192
+    port: 6379
+    timeout: 5000
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 101.34.81.192:8848
+        namespace: f825bf6a-2c3f-479c-ad77-fc971929fe0e
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user1
+          uri: lb://system
+          predicates:
+            - Path=/base/manager/debug52/system/**
+          filters:
+            - Log=true
+            - Authorize=true
+
+  application:
+    name: gateway-provider
+debug: true
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR
+  config: classpath:log4j2-dev.yml
+swagger:
+  services: system

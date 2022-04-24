@@ -1,0 +1,40 @@
+server:
+  port: 9001
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://101.34.81.192:3306/base_manager?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true&allowMultiQueries=true
+    username:
+    password:
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 101.34.81.192
+    port: 6379
+    timeout: 5000
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 101.34.81.192:8848
+        namespace: f825bf6a-2c3f-479c-ad77-fc971929fe0e
+  application:
+    name: system
+debug: true
+logging:
+  level:
+    org:
+      springframework:
+        boot:
+          autoconfigure: ERROR
+  config: classpath:log4j2-dev.yml
+mybatis:
+  type-aliases-package: com.debug52.system.bean
+  configuration:
+    lazy-loading-enabled: true # 打开延迟加载
+    cache-enabled: true # 开启二级缓存(默认也是开启的)
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启日志
+
+swagger:
+  termsOfServiceUrl: '/v2/api-docs'
+  version: 1.0.0
+  basePackage: com.debug52.system

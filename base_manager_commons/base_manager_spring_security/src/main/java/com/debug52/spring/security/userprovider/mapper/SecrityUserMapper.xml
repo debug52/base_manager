@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.debug52.spring.security.userprovider.mapper.SecrityUserMapper">
+
+    <select id="selectSPerById" resultType="com.debug52.spring.security.bean.PermissionBean">
+        SELECT
+            pe.*
+        FROM
+            map_antifake_permissions AS pe
+                LEFT JOIN base_manager_role_permissions_re AS pere ON pe.id = pere.permissionsId
+                LEFT JOIN base_manager_role as role on pere.roleId = role.id
+                LEFT JOIN base_manager_user_role_re as userrole on userrole.roleId = role.id
+                LEFT JOIN base_manager_user as user on userrole.userId = user.id
+        WHERE user.id=#{userId}
+    </select>
+
+    <select id="selectSPerByUserName" resultType="com.debug52.spring.security.bean.PermissionBean">
+        SELECT
+                pe.*
+        FROM
+                base_manager_permissions AS pe
+                        LEFT JOIN base_manager_role_permissions_re AS pere ON pe.id = pere.permissionsId
+                        LEFT JOIN base_manager_role as role on pere.roleId = role.id
+                        LEFT JOIN base_manager_user_role_re as userrole on userrole.roleId = role.id
+                        LEFT JOIN base_manager_user as user on userrole.userId = user.id
+        WHERE user.username=#{username,jdbcType=VARCHAR} and pe.is_delete=0
+    </select>
+
+    <select id="selectUserRoleSByUserId" resultType="java.lang.Integer">
+        select ro.state FROM base_manager_user as usr LEFT JOIN base_manager_user_role_re as ur ON usr.id=ur.userId  LEFT JOIN base_manager_role as ro on ur.roleid = ro.id
+        <where>
+            usr.id=#{userId}
+        </where>
+    </select>
+
+    <select id="selectByUserSName" resultType="com.debug52.spring.security.bean.UserDO">
+        select id,username,password,`state`,is_delete as isDelete from base_manager_user
+        where
+                username=#{username}
+          and is_delete=1
+    </select>
+
+    <select id="getUserSPermissionList" resultType="java.lang.Integer">
+        SELECT pe.id FROM base_manager_user_role_re as rolere
+        LEFT JOIN base_manager_role as role on rolere.roleId = role.id
+        LEFT JOIN base_manager_role_permissions_re as pere on role.id = pere.roleId
+        LEFT JOIN base_manager_permissions as pe on pere.permissionsId = pe.id
+        WHERE rolere.userId = #{userId,jdbcType=INTEGER}
+        AND role.state = 1
+        and  pe.id is not NULL
+        and pe.is_delete=0
+    </select>
+
+    <select id="selectUserSRole" resultType="java.lang.String">
+        select ro.roleName FROM base_manager_user as usr LEFT JOIN base_manager_user_role_re as ur ON usr.id=ur.userId  LEFT JOIN base_manager_role as ro on ur.roleid = ro.id
+        <where>
+            usr.id=#{userId}
+        </where>
+    </select>
+
+    <select id="selectUsersDetailByUserId" resultType="com.debug52.spring.security.bean.UserDetail">
+        select * from base_manager_user_details
+        <where>
+            user_id =#{userid}
+        </where>
+    </select>
+</mapper>

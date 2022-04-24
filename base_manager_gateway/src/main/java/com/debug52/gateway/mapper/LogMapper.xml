@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.debug52.gateway.mapper.LogMapper">
+  <resultMap id="BaseResultMap" type="com.debug52.gateway.bean.dao.LogDO">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="is_delete" jdbcType="INTEGER" property="isDelete" />
+    <result column="uri" jdbcType="VARCHAR" property="uri" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="request_method" jdbcType="VARCHAR" property="requestMethod" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from base_manager_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.debug52.gateway.bean.dao.LogDO">
+    insert into base_manager_log (remark, create_by,
+      create_date, update_by, update_date, 
+      is_delete, uri, ip, 
+      username, request_method,user_agent)
+    values (#{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR},
+      #{createDate,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, 
+      #{isDelete,jdbcType=INTEGER}, #{uri,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{requestMethod,jdbcType=VARCHAR},#{userAgent,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.debug52.gateway.bean.dao.LogDO">
+    update base_manager_log
+    set remark = #{remark,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=INTEGER},
+      uri = #{uri,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      username = #{username,jdbcType=VARCHAR},
+      request_method = #{requestMethod,jdbcType=VARCHAR},
+        user_agent=#{userAgent,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, remark, create_by, create_date, update_by, update_date, is_delete, uri, 
+    ip, username, request_method,user_agent
+    from base_manager_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, remark, create_by, create_date, update_by, update_date, is_delete, uri, 
+    ip, username, request_method,user_agent
+    from base_manager_log
+  </select>
+</mapper>
